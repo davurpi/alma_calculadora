@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_production_order">
+<t t-call="web.html_container">
+<t t-foreach="docs" t-as="o">
+<t t-call="web.external_layout">
+<div class="page">
+
+    <!-- ===== CABECERA ===== -->
+    <div class="row mb-3">
+        <div class="col-8">
+            <h2 style="color:#c0392b; margin-bottom:4px;">
+                ORDEN DE PRODUCCIÓN — <strong t-esc="o.name"/>
+            </h2>
+            <table class="table table-sm table-borderless" style="font-size:12px; margin-bottom:0;">
+                <tr>
+                    <td style="width:100px; font-weight:bold;">Cliente:</td>
+                    <td><strong t-esc="o.partner_id.name"/></td>
+                    <td style="width:100px; font-weight:bold;">Comercial:</td>
+                    <td t-esc="o.commercial_id.name"/>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">Fecha:</td>
+                    <td t-esc="o.date" t-options="{'widget':'date'}"/>
+                    <t t-if="o.reference">
+                        <td style="font-weight:bold;">Ref.:</td>
+                        <td t-esc="o.reference"/>
+                    </t>
+                </tr>
+            </table>
+        </div>
+        <div class="col-4 text-end" style="font-size:11px; color:#555;">
+            <p style="margin:0;">F. Entrega: _______________</p>
+            <p style="margin:0;">F. Tejido: _______________</p>
+            <p style="margin:0;">F. OK Pedido: _______________</p>
+        </div>
+    </div>
+
+    <!-- ===== TABLA DE PRODUCCIÓN ===== -->
+    <table class="table table-sm table-bordered" style="font-size:11px; border-collapse:collapse;">
+        <thead style="background-color:#c0392b; color:white;">
+            <tr>
+                <th style="text-align:center; width:30px;">Cinta</th>
+                <th style="text-align:center; width:80px;">Medida Mesa</th>
+                <th style="width:80px;">Artículo</th>
+                <th style="text-align:center; width:80px;">Medida Uso</th>
+                <th style="width:100px;">Tejido</th>
+                <th style="width:80px;">Color</th>
+                <th style="text-align:center; width:80px;">Dobladillo</th>
+                <th style="text-align:center; width:80px;">Encog.</th>
+                <th style="text-align:center; width:90px;">Corte</th>
+                <th style="text-align:center; width:40px;">Cant.</th>
+            </tr>
+        </thead>
+        <tbody>
+            <t t-set="row_num" t-value="1"/>
+            <t t-foreach="o.line_ids" t-as="line">
+                <t t-if="line.quantity > 0">
+                    <tr>
+                        <!-- Cinta (nº identificación de prenda) -->
+                        <td style="text-align:center; font-weight:bold; background-color:#fef9e7;">
+                            <t t-esc="row_num"/>
+                        </td>
+                        <!-- Medida mesa -->
+                        <td style="text-align:center; font-size:10px;">
+                            <t t-esc="line.mesa_size_display or ''"/>
+                        </td>
+                        <!-- Tipo artículo -->
+                        <td t-esc="line.display_article_type"/>
+                        <!-- Medida uso (terminada) -->
+                        <td style="text-align:center;">
+                            <t t-esc="line.display_dimensions"/>
+                            <t t-if="line.is_prototype">
+                                <span style="color:#e67e22; font-weight:bold;"> PR</span>
+                            </t>
+                        </td>
+                        <!-- Tejido -->
+                        <td t-esc="line.fabric_name"/>
+                        <!-- Color -->
+                        <td t-esc="line.color_name"/>
+                        <!-- Dobladillo -->
+                        <td style="text-align:center; font-size:10px;" t-esc="line.display_hem"/>
+                        <!-- Encogimiento -->
+                        <td style="text-align:center;">
+                            <t t-if="line.apply_shrinkage">
+                                <span style="color:green; font-weight:bold;">✓</span>
+                            </t>
+                        </td>
+                        <!-- Corte (medida real a cortar) -->
+                        <td style="text-align:center; font-weight:bold;">
+                            <t t-esc="line.display_cut"/>
+                        </td>
+                        <!-- Cantidad -->
+                        <td style="text-align:center; font-weight:bold; font-size:13px;">
+                            <t t-esc="int(line.quantity)"/>
+                        </td>
+                    </tr>
+                    <t t-set="row_num" t-value="row_num + 1"/>
+
+                    <!-- Sub-fila si hay empalme -->
+                    <t t-if="line.has_empalme and line.empalme_id">
+                        <tr style="background-color:#fce4e4;">
+                            <td/>
+                            <td colspan="9" style="font-size:10px; color:#c0392b; padding-left:30px;">
+                                ▶ EMPALME: ref <t t-esc="line.empalme_ref"/>
+                                — Corte empalme: <t t-esc="line.empalme_length_cm"/> cm
+                                × <t t-esc="line.empalme_id.empalme_width_cm"/> cm
+                                (<t t-esc="line.pieces_per_width"/> pzas. por ancho)
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+            </t>
+        </tbody>
+    </table>
+
+    <!-- ===== PIE: anotaciones estándar ===== -->
+    <div class="mt-3" style="font-size:10px; color:#555; border-top:1px solid #dee2e6; padding-top:8px;">
+        <p style="margin:2px 0;">• Todas las prendas serán identificadas con etiqueta color según medida (número de cinta).</p>
+        <p style="margin:2px 0;">• La cantidad de prendas puede variar en un +/- 10%.</p>
+        <t t-if="o.notes">
+            <p style="margin:2px 0; margin-top:6px;"><em>Notas: <t t-esc="o.notes"/></em></p>
+        </t>
+    </div>
+
+</div>
+</t>
+</t>
+</t>
+</template>
+</odoo>

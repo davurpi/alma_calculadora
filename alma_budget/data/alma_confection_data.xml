@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Secuencia para numeración automática de presupuestos -->
+    <record id="seq_alma_budget" model="ir.sequence">
+        <field name="name">Presupuesto Mantelería</field>
+        <field name="code">alma.budget</field>
+        <field name="prefix">PRESU/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <!-- Tipos de Artículo (pestaña ARTICULOS cols A-B) -->
+    <record id="article_type_1" model="alma.article.type">
+        <field name="code">1</field>
+        <field name="name">Mantel</field>
+    </record>
+    <record id="article_type_2" model="alma.article.type">
+        <field name="code">2</field>
+        <field name="name">Cubre</field>
+    </record>
+    <record id="article_type_3" model="alma.article.type">
+        <field name="code">3</field>
+        <field name="name">Servilleta</field>
+    </record>
+    <record id="article_type_4" model="alma.article.type">
+        <field name="code">4</field>
+        <field name="name">Camino de mesa</field>
+    </record>
+    <record id="article_type_5" model="alma.article.type">
+        <field name="code">5</field>
+        <field name="name">Muletón</field>
+    </record>
+    <record id="article_type_6" model="alma.article.type">
+        <field name="code">6</field>
+        <field name="name">Gueridón</field>
+    </record>
+    <record id="article_type_7" model="alma.article.type">
+        <field name="code">7</field>
+        <field name="name">Lito</field>
+    </record>
+    <record id="article_type_8" model="alma.article.type">
+        <field name="code">8</field>
+        <field name="name">Individual</field>
+    </record>
+    <record id="article_type_9" model="alma.article.type">
+        <field name="code">9</field>
+        <field name="name">Otros</field>
+    </record>
+    <record id="article_type_10" model="alma.article.type">
+        <field name="code">10</field>
+        <field name="name">Funda</field>
+    </record>
+</odoo>

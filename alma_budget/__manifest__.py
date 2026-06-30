@@ -1,0 +1,21 @@
+{
+    'name': 'Alma - Calculadora de Presupuestos Mantelería',
+    'version': '17.0.1.0.0',
+    'category': 'Sales',
+    'summary': 'Calculadora de presupuestos con lógica de tejidos, confección y empalmes',
+    'author': 'Alma',
+    'depends': ['sale', 'account'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/alma_confection_data.xml',
+        'views/alma_fabric_views.xml',
+        'views/alma_budget_views.xml',
+        'views/menus.xml',
+        'report/report_actions.xml',
+        'report/report_budget_client.xml',
+        'report/report_production_order.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

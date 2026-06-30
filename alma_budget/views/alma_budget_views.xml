@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================================================================
+         VISTA ÁRBOL — Lista de presupuestos
+    ================================================================ -->
+    <record id="view_alma_budget_tree" model="ir.ui.view">
+        <field name="name">alma.budget.tree</field>
+        <field name="model">alma.budget</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state == 'draft'" decoration-success="state == 'done'"
+                  decoration-muted="state == 'cancel'">
+                <column type="char" name="name" string="Nº Presupuesto"/>
+                <column type="many2one" name="partner_id" string="Cliente"/>
+                <column type="date" name="date"/>
+                <column type="many2one" name="commercial_id" string="Comercial"/>
+                <column type="float" name="total_amount" string="Total (€)" sum="Total"/>
+                <column type="selection" name="state" string="Estado"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         VISTA FORMULARIO — Presupuesto completo
+    ================================================================ -->
+    <record id="view_alma_budget_form" model="ir.ui.view">
+        <field name="name">alma.budget.form</field>
+        <field name="model">alma.budget</field>
+        <field name="arch" type="xml">
+            <form string="Presupuesto Mantelería">
+                <header>
+                    <button name="action_confirm" string="Confirmar" type="object"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_send" string="Enviado al cliente" type="object"
+                            invisible="state not in ('confirmed',)"/>
+                    <button name="action_done" string="Realizado" type="object"
+                            invisible="state != 'sent'"/>
+                    <button name="action_cancel" string="Cancelar" type="object"
+                            invisible="state in ('cancel', 'done')"/>
+                    <button name="action_draft" string="Volver a borrador" type="object"
+                            invisible="state != 'cancel'"/>
+                    <button name="action_print_budget" string="PDF Cliente" type="object"
+                            class="btn-secondary" icon="fa-print"/>
+                    <button name="action_print_production" string="Orden de Producción" type="object"
+                            class="btn-secondary" icon="fa-industry"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,sent,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <!-- Cabecera: datos del presupuesto -->
+                    <group>
+                        <group string="Datos del Presupuesto">
+                            <field name="partner_id" options="{'no_create': True}"/>
+                            <field name="date"/>
+                            <field name="commercial_id"/>
+                            <field name="reference"/>
+                            <field name="sale_order_id" optional="show"/>
+                        </group>
+                        <group string="Datos Fiscales (del cliente)">
+                            <field name="vat" readonly="1"/>
+                            <field name="street" readonly="1"/>
+                            <field name="email" readonly="1"/>
+                            <field name="phone" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Líneas de presupuesto -->
+                    <notebook>
+                        <page string="Líneas de Presupuesto">
+                            <field name="line_ids" widget="one2many">
+                                <tree editable="bottom" decoration-muted="quantity == 0">
+                                    <column type="integer" name="sequence" widget="handle" optional="hide"/>
+                                    <column type="float" name="quantity" string="Cant." optional="show"/>
+                                    <column type="many2one" name="fabric_color_id" string="Tejido / Color" width="200px"/>
+                                    <column type="many2one" name="article_type_id" string="Tipo" width="100px"/>
+                                    <column type="float" name="margin_pct" string="Margen" widget="percentage" optional="show"/>
+
+                                    <!-- Medidas mesa -->
+                                    <column type="float" name="width_mesa" string="Ancho M." optional="show"/>
+                                    <column type="float" name="length_mesa" string="Largo M." optional="show"/>
+                                    <column type="float" name="diameter_round" string="Ø Redonda" optional="hide"/>
+                                    <column type="float" name="table_height" string="Alto M." optional="show"/>
+                                    <column type="float" name="extra_length" string="+Largo" optional="hide"/>
+                                    <column type="float" name="drop" string="Caída" optional="show"/>
+
+                                    <!-- Confección -->
+                                    <column type="float" name="hem_type" string="Dobl." optional="show"/>
+                                    <column type="boolean" name="apply_shrinkage" string="Encog." optional="show"/>
+                                    <column type="selection" name="shape_type" string="Forma" optional="hide"/>
+                                    <column type="boolean" name="has_empalme" string="Empalme" optional="hide"/>
+                                    <column type="boolean" name="has_feston" string="Festón" optional="hide"/>
+                                    <column type="boolean" name="is_prototype" string="PR" optional="hide"/>
+
+                                    <!-- Medidas calculadas -->
+                                    <column type="float" name="finished_width" string="Term. A" readonly="1" optional="show"/>
+                                    <column type="float" name="finished_length" string="Term. L" readonly="1" optional="show"/>
+                                    <column type="float" name="cut_width" string="Corte A" readonly="1" optional="show"/>
+                                    <column type="float" name="cut_length" string="Corte L" readonly="1" optional="show"/>
+
+                                    <!-- Costes -->
+                                    <column type="float" name="sale_price_per_meter" string="€/m" readonly="1" optional="show" digits="[10,4]"/>
+                                    <column type="float" name="confection_cost" string="€ Conf." readonly="1" optional="show" digits="[10,4]"/>
+                                    <column type="float" name="fabric_cost" string="€ Tejido" readonly="1" optional="show" digits="[10,4]"/>
+                                    <column type="float" name="feston_cost" string="€ Festón" readonly="1" optional="hide" digits="[10,4]"/>
+                                    <column type="float" name="unit_cost" string="€ Unit." readonly="1" optional="show" digits="[10,4]"/>
+                                    <column type="float" name="line_total" string="Total €" readonly="1" sum="Total" digits="[10,2]"/>
+                                </tree>
+                                <form string="Línea de Presupuesto">
+                                    <sheet>
+                                        <group string="Artículo">
+                                            <field name="quantity"/>
+                                            <field name="fabric_color_id"/>
+                                            <field name="article_type_id"/>
+                                            <field name="margin_pct" widget="percentage"/>
+                                            <field name="is_prototype"/>
+                                        </group>
+                                        <group string="Datos del Tejido (calculados)">
+                                            <field name="fabric_name" readonly="1"/>
+                                            <field name="color_name" readonly="1"/>
+                                            <field name="cost_per_meter" readonly="1"/>
+                                            <field name="sale_price_per_meter" readonly="1"/>
+                                            <field name="fabric_width_m" readonly="1" string="Ancho tejido (m)"/>
+                                        </group>
+                                        <group string="Medidas de la Mesa">
+                                            <group>
+                                                <field name="width_mesa" string="Ancho Mesa (cm)"/>
+                                                <field name="length_mesa" string="Largo Mesa (cm)"/>
+                                                <field name="diameter_round" string="Diámetro Redonda (cm)"/>
+                                                <field name="table_height" string="Alto Mesa (cm)"/>
+                                                <field name="extra_length" string="Añadir Largo (cm)"/>
+                                                <field name="drop" string="Caída Mantel (cm)"/>
+                                            </group>
+                                            <group string="Medidas Calculadas">
+                                                <field name="mesa_size_display" readonly="1" string="Desc. Mesa"/>
+                                                <field name="finished_width" readonly="1" string="Medida Terminada Ancho"/>
+                                                <field name="finished_length" readonly="1" string="Medida Terminada Largo"/>
+                                            </group>
+                                        </group>
+                                        <group string="Confección">
+                                            <group>
+                                                <field name="hem_type"/>
+                                                <field name="apply_shrinkage"/>
+                                                <field name="shape_type"/>
+                                                <field name="has_empalme"/>
+                                                <field name="empalme_override" invisible="not has_empalme"/>
+                                                <field name="use_remnants"/>
+                                                <field name="has_feston"/>
+                                            </group>
+                                            <group string="Medidas de Corte">
+                                                <field name="width_with_hem" readonly="1" string="Ancho con Dobl."/>
+                                                <field name="length_with_hem" readonly="1" string="Largo con Dobl."/>
+                                                <field name="cut_width" readonly="1" string="Ancho Corte (con encog.)"/>
+                                                <field name="cut_length" readonly="1" string="Largo Corte (con encog.)"/>
+                                            </group>
+                                        </group>
+                                        <group string="Empalme" invisible="not has_empalme">
+                                            <field name="empalme_ref" readonly="1"/>
+                                            <field name="empalme_id" readonly="1"/>
+                                            <field name="empalme_length_cm" readonly="1"/>
+                                            <field name="pieces_per_width" readonly="1"/>
+                                        </group>
+                                        <group string="Resumen de Costes">
+                                            <field name="confection_cost" readonly="1"/>
+                                            <field name="fabric_cost" readonly="1"/>
+                                            <field name="feston_cost" readonly="1"/>
+                                            <field name="unit_cost" readonly="1"/>
+                                            <field name="line_total" readonly="1"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+
+                            <!-- Totales -->
+                            <group class="oe_subtotal_footer">
+                                <field name="total_amount" string="TOTAL PRESUPUESTO (sin IVA)"
+                                       widget="monetary" options="{'currency_field': 'currency_id'}"
+                                       readonly="1" force_save="1"/>
+                            </group>
+                        </page>
+
+                        <page string="Notas / Condiciones">
+                            <field name="notes" widget="text"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_alma_budget" model="ir.actions.act_window">
+        <field name="name">Presupuestos Mantelería</field>
+        <field name="res_model">alma.budget</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

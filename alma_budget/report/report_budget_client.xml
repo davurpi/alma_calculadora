@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_budget_client">
+<t t-call="web.html_container">
+<t t-foreach="docs" t-as="o">
+<t t-call="web.external_layout">
+<div class="page">
+
+    <!-- ===== CABECERA ===== -->
+    <div class="row mb-4">
+        <div class="col-6">
+            <h2 style="color:#2c3e50;">PRESUPUESTO Nº <strong t-esc="o.name"/></h2>
+            <table class="table table-sm table-borderless" style="font-size:13px;">
+                <tr>
+                    <td style="width:130px;font-weight:bold;">Cliente:</td>
+                    <td t-esc="o.partner_id.name"/>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">Fecha:</td>
+                    <td t-esc="o.date" t-options="{'widget':'date'}"/>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold;">Comercial:</td>
+                    <td t-esc="o.commercial_id.name"/>
+                </tr>
+                <t t-if="o.reference">
+                    <tr>
+                        <td style="font-weight:bold;">Referencia:</td>
+                        <td t-esc="o.reference"/>
+                    </tr>
+                </t>
+            </table>
+        </div>
+        <div class="col-6 text-end">
+            <table class="table table-sm table-borderless" style="font-size:12px;">
+                <t t-if="o.vat">
+                    <tr>
+                        <td style="font-weight:bold;">NIF:</td>
+                        <td t-esc="o.vat"/>
+                    </tr>
+                </t>
+                <t t-if="o.street">
+                    <tr>
+                        <td style="font-weight:bold;">Dirección:</td>
+                        <td t-esc="o.street"/>
+                    </tr>
+                </t>
+                <t t-if="o.email">
+                    <tr>
+                        <td style="font-weight:bold;">Correo:</td>
+                        <td t-esc="o.email"/>
+                    </tr>
+                </t>
+                <t t-if="o.phone">
+                    <tr>
+                        <td style="font-weight:bold;">Teléfono:</td>
+                        <td t-esc="o.phone"/>
+                    </tr>
+                </t>
+            </table>
+        </div>
+    </div>
+
+    <!-- ===== TABLA DE LÍNEAS ===== -->
+    <table class="table table-sm" style="font-size:12px; border-collapse:collapse;">
+        <thead style="background-color:#2c3e50; color:white;">
+            <tr>
+                <th style="width:40px; text-align:center;">Cant.</th>
+                <th>Artículo</th>
+                <th>Tejido</th>
+                <th>Color</th>
+                <th style="text-align:center;">Mesa</th>
+                <th style="text-align:center;">Medida Uso</th>
+                <th style="text-align:center;">Dobladillo</th>
+                <th style="text-align:right;">€ Unidad</th>
+                <th style="text-align:right;">€ Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <t t-foreach="o.line_ids" t-as="line">
+                <t t-if="line.quantity > 0">
+                    <tr style="border-bottom:1px solid #dee2e6;">
+                        <td style="text-align:center; vertical-align:middle;">
+                            <strong t-esc="int(line.quantity)"/>
+                        </td>
+                        <td style="vertical-align:middle;">
+                            <span t-esc="line.display_article_type"/>
+                            <t t-if="line.is_prototype">
+                                <span class="badge bg-warning text-dark ms-1">PR</span>
+                            </t>
+                        </td>
+                        <td style="vertical-align:middle;" t-esc="line.fabric_name"/>
+                        <td style="vertical-align:middle;" t-esc="line.color_name"/>
+                        <td style="text-align:center; vertical-align:middle; font-size:11px;"
+                            t-esc="line.mesa_size_display or '-'"/>
+                        <td style="text-align:center; vertical-align:middle;">
+                            <t t-esc="line.display_dimensions"/>
+                        </td>
+                        <td style="text-align:center; vertical-align:middle; font-size:11px;"
+                            t-esc="line.display_hem"/>
+                        <td style="text-align:right; vertical-align:middle;">
+                            <t t-esc="'%.4f' % line.unit_cost"/> €
+                        </td>
+                        <td style="text-align:right; vertical-align:middle; font-weight:bold;">
+                            <t t-esc="'%.2f' % line.line_total"/> €
+                        </td>
+                    </tr>
+                    <!-- Fila de detalle: encogimiento si aplica -->
+                    <t t-if="line.apply_shrinkage">
+                        <tr style="background-color:#f8f9fa; border-bottom:1px solid #dee2e6;">
+                            <td colspan="9" style="font-size:10px; color:#6c757d; padding-left:60px;">
+                                Considerado encogimiento — Medida de corte:
+                                <strong t-esc="int(line.cut_width)"/> × <strong t-esc="int(line.cut_length)"/> cm
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+            </t>
+        </tbody>
+        <tfoot>
+            <tr style="border-top:2px solid #2c3e50;">
+                <td colspan="8" style="text-align:right; font-size:14px; font-weight:bold; padding-top:8px;">
+                    TOTAL PRESUPUESTO
+                </td>
+                <td style="text-align:right; font-size:14px; font-weight:bold; padding-top:8px; color:#2c3e50;">
+                    <t t-esc="'%.2f' % o.total_amount"/> €
+                </td>
+            </tr>
+            <tr>
+                <td colspan="9" style="text-align:right; font-size:10px; color:#6c757d;">
+                    Precios sin IVA
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- ===== NOTAS / CONDICIONES ===== -->
+    <t t-if="o.notes">
+        <div class="mt-4" style="font-size:11px; color:#555;">
+            <strong>Condiciones:</strong>
+            <p style="white-space:pre-line; margin-top:4px;" t-esc="o.notes"/>
+        </div>
+    </t>
+
+</div>
+</t>
+</t>
+</t>
+</template>
+</odoo>

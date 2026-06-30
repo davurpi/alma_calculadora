@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Reporte PDF para el CLIENTE -->
+    <record id="action_report_budget_client" model="ir.actions.report">
+        <field name="name">Presupuesto Cliente</field>
+        <field name="model">alma.budget</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">alma_budget.report_budget_client</field>
+        <field name="report_file">alma_budget.report_budget_client</field>
+        <field name="print_report_name">'Presupuesto_%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_alma_budget"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_a4"/>
+    </record>
+
+    <!-- Reporte PDF ORDEN DE PRODUCCIÓN (interno) -->
+    <record id="action_report_production_order" model="ir.actions.report">
+        <field name="name">Orden de Producción</field>
+        <field name="model">alma.budget</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">alma_budget.report_production_order</field>
+        <field name="report_file">alma_budget.report_production_order</field>
+        <field name="print_report_name">'OrdenProduccion_%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_alma_budget"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_a4_landscape"/>
+    </record>
+</odoo>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_alma_article_type,alma.article.type,model_alma_article_type,,1,1,1,1
+access_alma_fabric,alma.fabric,model_alma_fabric,,1,1,1,1
+access_alma_fabric_color,alma.fabric.color,model_alma_fabric_color,,1,1,1,1
+access_alma_empalme,alma.empalme,model_alma_empalme,,1,1,1,1
+access_alma_budget,alma.budget,model_alma_budget,,1,1,1,1
+access_alma_budget_line,alma.budget.line,model_alma_budget_line,,1,1,1,1

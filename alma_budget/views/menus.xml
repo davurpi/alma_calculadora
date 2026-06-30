@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menú raíz -->
+    <menuitem id="menu_alma_root"
+              name="Mantelería"
+              sequence="50"
+              web_icon="alma_budget,static/description/icon.png"/>
+
+    <!-- Presupuestos -->
+    <menuitem id="menu_alma_budget_main"
+              name="Presupuestos"
+              parent="menu_alma_root"
+              sequence="10"/>
+
+    <menuitem id="menu_alma_budget"
+              name="Todos los Presupuestos"
+              parent="menu_alma_budget_main"
+              action="action_alma_budget"
+              sequence="10"/>
+
+    <!-- Configuración -->
+    <menuitem id="menu_alma_config"
+              name="Configuración"
+              parent="menu_alma_root"
+              sequence="90"/>
+
+    <menuitem id="menu_alma_fabric"
+              name="Tejidos"
+              parent="menu_alma_config"
+              action="action_alma_fabric"
+              sequence="10"/>
+
+    <menuitem id="menu_alma_empalme"
+              name="Tabla de Empalmes"
+              parent="menu_alma_config"
+              action="action_alma_empalme"
+              sequence="20"/>
+
+    <menuitem id="menu_alma_article_type"
+              name="Tipos de Artículo"
+              parent="menu_alma_config"
+              action="action_alma_article_type"
+              sequence="30"/>
+</odoo>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================================================================
+         VISTAS: TEJIDOS (alma.fabric)
+    ================================================================ -->
+    <record id="view_alma_fabric_tree" model="ir.ui.view">
+        <field name="name">alma.fabric.tree</field>
+        <field name="model">alma.fabric</field>
+        <field name="arch" type="xml">
+            <tree>
+                <column type="char" name="ref1" string="REF 1" optional="show"/>
+                <column type="char" name="ref2" string="REF 2" optional="show"/>
+                <column type="char" name="ref_combined" string="REF Combinada"/>
+                <column type="char" name="name" string="Tejido"/>
+                <column type="float" name="shrinkage_width" string="Encog. Ancho %" digits="[6,4]" optional="show"/>
+                <column type="float" name="shrinkage_length" string="Encog. Largo %" digits="[6,4]" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_alma_fabric_form" model="ir.ui.view">
+        <field name="name">alma.fabric.form</field>
+        <field name="model">alma.fabric</field>
+        <field name="arch" type="xml">
+            <form string="Tejido">
+                <sheet>
+                    <group>
+                        <group string="Identificación">
+                            <field name="name"/>
+                            <field name="ref1"/>
+                            <field name="ref2"/>
+                            <field name="ref_combined" readonly="1"/>
+                        </group>
+                        <group string="Encogimientos">
+                            <field name="shrinkage_width" string="Encogimiento Ancho (%)" widget="percentage"/>
+                            <field name="shrinkage_length" string="Encogimiento Largo (%)" widget="percentage"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Colores disponibles">
+                            <field name="color_ids">
+                                <tree editable="bottom">
+                                    <column type="integer" name="color_code" string="Cód."/>
+                                    <column type="char" name="color_name" string="Color"/>
+                                    <column type="char" name="ref3" string="REF 3" readonly="1"/>
+                                    <column type="float" name="cost" string="Coste €/m" digits="[10,4]"/>
+                                    <column type="float" name="width" string="Ancho (m)" digits="[6,3]"/>
+                                    <column type="char" name="composition" string="Composición" optional="show"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_alma_fabric" model="ir.actions.act_window">
+        <field name="name">Tejidos</field>
+        <field name="res_model">alma.fabric</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- ================================================================
+         VISTAS: EMPALMES (alma.empalme)
+    ================================================================ -->
+    <record id="view_alma_empalme_tree" model="ir.ui.view">
+        <field name="name">alma.empalme.tree</field>
+        <field name="model">alma.empalme</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <column type="integer" name="fabric_width_cm" string="Ancho Tejido (cm)"/>
+                <column type="integer" name="mantel_width_cm" string="Ancho Mantel (cm)"/>
+                <column type="char" name="ref_empalme" string="REF" readonly="1"/>
+                <column type="integer" name="empalme_length_cm" string="Largo Empalme (cm)"/>
+                <column type="float" name="empalme_width_cm" string="Ancho Empalme (cm)" readonly="1"/>
+                <column type="integer" name="pieces_per_width" string="Piezas/Ancho" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_alma_empalme" model="ir.actions.act_window">
+        <field name="name">Tabla de Empalmes</field>
+        <field name="res_model">alma.empalme</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- ================================================================
+         VISTAS: TIPOS DE ARTÍCULO (alma.article.type)
+    ================================================================ -->
+    <record id="action_alma_article_type" model="ir.actions.act_window">
+        <field name="name">Tipos de Artículo</field>
+        <field name="res_model">alma.article.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
