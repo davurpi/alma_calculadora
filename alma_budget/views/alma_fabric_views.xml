@@ -8,12 +8,12 @@
         <field name="model">alma.fabric</field>
         <field name="arch" type="xml">
             <tree>
-                <column type="char" name="ref1" string="REF 1" optional="show"/>
-                <column type="char" name="ref2" string="REF 2" optional="show"/>
-                <column type="char" name="ref_combined" string="REF Combinada"/>
-                <column type="char" name="name" string="Tejido"/>
-                <column type="float" name="shrinkage_width" string="Encog. Ancho %" digits="[6,4]" optional="show"/>
-                <column type="float" name="shrinkage_length" string="Encog. Largo %" digits="[6,4]" optional="show"/>
+                <field name="ref1" string="REF 1" optional="show"/>
+                <field name="ref2" string="REF 2" optional="show"/>
+                <field name="ref_combined" string="REF Combinada"/>
+                <field name="name" string="Tejido"/>
+                <field name="shrinkage_width" string="Encog. Ancho %" digits="[6,4]" optional="show"/>
+                <field name="shrinkage_length" string="Encog. Largo %" digits="[6,4]" optional="show"/>
             </tree>
         </field>
     </record>
@@ -40,12 +40,12 @@
                         <page string="Colores disponibles">
                             <field name="color_ids">
                                 <tree editable="bottom">
-                                    <column type="integer" name="color_code" string="Cód."/>
-                                    <column type="char" name="color_name" string="Color"/>
-                                    <column type="char" name="ref3" string="REF 3" readonly="1"/>
-                                    <column type="float" name="cost" string="Coste €/m" digits="[10,4]"/>
-                                    <column type="float" name="width" string="Ancho (m)" digits="[6,3]"/>
-                                    <column type="char" name="composition" string="Composición" optional="show"/>
+                                    <field name="color_code" string="Cód."/>
+                                    <field name="color_name" string="Color"/>
+                                    <field name="ref3" string="REF 3" readonly="1"/>
+                                    <field name="cost" string="Coste €/m" digits="[10,4]"/>
+                                    <field name="width" string="Ancho (m)" digits="[6,3]"/>
+                                    <field name="composition" string="Composición" optional="show"/>
                                 </tree>
                             </field>
                         </page>
@@ -69,12 +69,12 @@
         <field name="model">alma.empalme</field>
         <field name="arch" type="xml">
             <tree editable="top">
-                <column type="integer" name="fabric_width_cm" string="Ancho Tejido (cm)"/>
-                <column type="integer" name="mantel_width_cm" string="Ancho Mantel (cm)"/>
-                <column type="char" name="ref_empalme" string="REF" readonly="1"/>
-                <column type="integer" name="empalme_length_cm" string="Largo Empalme (cm)"/>
-                <column type="float" name="empalme_width_cm" string="Ancho Empalme (cm)" readonly="1"/>
-                <column type="integer" name="pieces_per_width" string="Piezas/Ancho" readonly="1"/>
+                <field name="fabric_width_cm" string="Ancho Tejido (cm)"/>
+                <field name="mantel_width_cm" string="Ancho Mantel (cm)"/>
+                <field name="ref_empalme" string="REF" readonly="1"/>
+                <field name="empalme_length_cm" string="Largo Empalme (cm)"/>
+                <field name="empalme_width_cm" string="Ancho Empalme (cm)" readonly="1"/>
+                <field name="pieces_per_width" string="Piezas/Ancho" readonly="1"/>
             </tree>
         </field>
     </record>

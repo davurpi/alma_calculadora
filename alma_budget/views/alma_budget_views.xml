@@ -9,12 +9,12 @@
         <field name="arch" type="xml">
             <tree decoration-info="state == 'draft'" decoration-success="state == 'done'"
                   decoration-muted="state == 'cancel'">
-                <column type="char" name="name" string="Nº Presupuesto"/>
-                <column type="many2one" name="partner_id" string="Cliente"/>
-                <column type="date" name="date"/>
-                <column type="many2one" name="commercial_id" string="Comercial"/>
-                <column type="float" name="total_amount" string="Total (€)" sum="Total"/>
-                <column type="selection" name="state" string="Estado"/>
+                <field name="name" string="Nº Presupuesto"/>
+                <field name="partner_id" string="Cliente"/>
+                <field name="date"/>
+                <field name="commercial_id" string="Comercial"/>
+                <field name="total_amount" string="Total (€)" sum="Total"/>
+                <field name="state" string="Estado"/>
             </tree>
         </field>
     </record>
@@ -74,41 +74,41 @@
                         <page string="Líneas de Presupuesto">
                             <field name="line_ids" widget="one2many">
                                 <tree editable="bottom" decoration-muted="quantity == 0">
-                                    <column type="integer" name="sequence" widget="handle" optional="hide"/>
-                                    <column type="float" name="quantity" string="Cant." optional="show"/>
-                                    <column type="many2one" name="fabric_color_id" string="Tejido / Color" width="200px"/>
-                                    <column type="many2one" name="article_type_id" string="Tipo" width="100px"/>
-                                    <column type="float" name="margin_pct" string="Margen" widget="percentage" optional="show"/>
+                                    <field name="sequence" widget="handle" optional="hide"/>
+                                    <field name="quantity" string="Cant." optional="show"/>
+                                    <field name="fabric_color_id" string="Tejido / Color" optional="show"/>
+                                    <field name="article_type_id" string="Tipo" optional="show"/>
+                                    <field name="margin_pct" string="Margen" widget="percentage" optional="show"/>
 
                                     <!-- Medidas mesa -->
-                                    <column type="float" name="width_mesa" string="Ancho M." optional="show"/>
-                                    <column type="float" name="length_mesa" string="Largo M." optional="show"/>
-                                    <column type="float" name="diameter_round" string="Ø Redonda" optional="hide"/>
-                                    <column type="float" name="table_height" string="Alto M." optional="show"/>
-                                    <column type="float" name="extra_length" string="+Largo" optional="hide"/>
-                                    <column type="float" name="drop" string="Caída" optional="show"/>
+                                    <field name="width_mesa" string="Ancho M." optional="show"/>
+                                    <field name="length_mesa" string="Largo M." optional="show"/>
+                                    <field name="diameter_round" string="Ø Redonda" optional="hide"/>
+                                    <field name="table_height" string="Alto M." optional="show"/>
+                                    <field name="extra_length" string="+Largo" optional="hide"/>
+                                    <field name="drop" string="Caída" optional="show"/>
 
                                     <!-- Confección -->
-                                    <column type="float" name="hem_type" string="Dobl." optional="show"/>
-                                    <column type="boolean" name="apply_shrinkage" string="Encog." optional="show"/>
-                                    <column type="selection" name="shape_type" string="Forma" optional="hide"/>
-                                    <column type="boolean" name="has_empalme" string="Empalme" optional="hide"/>
-                                    <column type="boolean" name="has_feston" string="Festón" optional="hide"/>
-                                    <column type="boolean" name="is_prototype" string="PR" optional="hide"/>
+                                    <field name="hem_type" string="Dobl." optional="show"/>
+                                    <field name="apply_shrinkage" string="Encog." optional="show"/>
+                                    <field name="shape_type" string="Forma" optional="hide"/>
+                                    <field name="has_empalme" string="Empalme" optional="hide"/>
+                                    <field name="has_feston" string="Festón" optional="hide"/>
+                                    <field name="is_prototype" string="PR" optional="hide"/>
 
                                     <!-- Medidas calculadas -->
-                                    <column type="float" name="finished_width" string="Term. A" readonly="1" optional="show"/>
-                                    <column type="float" name="finished_length" string="Term. L" readonly="1" optional="show"/>
-                                    <column type="float" name="cut_width" string="Corte A" readonly="1" optional="show"/>
-                                    <column type="float" name="cut_length" string="Corte L" readonly="1" optional="show"/>
+                                    <field name="finished_width" string="Term. A" readonly="1" optional="show"/>
+                                    <field name="finished_length" string="Term. L" readonly="1" optional="show"/>
+                                    <field name="cut_width" string="Corte A" readonly="1" optional="show"/>
+                                    <field name="cut_length" string="Corte L" readonly="1" optional="show"/>
 
                                     <!-- Costes -->
-                                    <column type="float" name="sale_price_per_meter" string="€/m" readonly="1" optional="show" digits="[10,4]"/>
-                                    <column type="float" name="confection_cost" string="€ Conf." readonly="1" optional="show" digits="[10,4]"/>
-                                    <column type="float" name="fabric_cost" string="€ Tejido" readonly="1" optional="show" digits="[10,4]"/>
-                                    <column type="float" name="feston_cost" string="€ Festón" readonly="1" optional="hide" digits="[10,4]"/>
-                                    <column type="float" name="unit_cost" string="€ Unit." readonly="1" optional="show" digits="[10,4]"/>
-                                    <column type="float" name="line_total" string="Total €" readonly="1" sum="Total" digits="[10,2]"/>
+                                    <field name="sale_price_per_meter" string="€/m" readonly="1" optional="show" digits="[10,4]"/>
+                                    <field name="confection_cost" string="€ Conf." readonly="1" optional="show" digits="[10,4]"/>
+                                    <field name="fabric_cost" string="€ Tejido" readonly="1" optional="show" digits="[10,4]"/>
+                                    <field name="feston_cost" string="€ Festón" readonly="1" optional="hide" digits="[10,4]"/>
+                                    <field name="unit_cost" string="€ Unit." readonly="1" optional="show" digits="[10,4]"/>
+                                    <field name="line_total" string="Total €" readonly="1" sum="Total" digits="[10,2]"/>
                                 </tree>
                                 <form string="Línea de Presupuesto">
                                     <sheet>
@@ -180,6 +180,7 @@
                                 <field name="total_amount" string="TOTAL PRESUPUESTO (sin IVA)"
                                        widget="monetary" options="{'currency_field': 'currency_id'}"
                                        readonly="1" force_save="1"/>
+                                <field name="currency_id" invisible="1"/>
                             </group>
                         </page>
 

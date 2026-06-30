@@ -41,7 +41,7 @@ class AlmaFabricColor(models.Model):
         return [(r.id, f"{r.fabric_name} - {r.color_name}") for r in self]
 
     @api.model
-    def _name_search(self, name, domain=None, operator='ilike', limit=100, order=None):
+    def _name_search(self, name='', domain=None, operator='ilike', limit=100, order=None):
         domain = domain or []
         if name:
             domain = ['|', '|',

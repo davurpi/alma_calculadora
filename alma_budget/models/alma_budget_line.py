@@ -20,7 +20,7 @@ def _confection_rate(cut_width_cm, cut_length_cm):
     l_range = math.ceil(cut_length_cm / 50)  # 1..14 para largos hasta 700cm
     idx = max(0, w_range + l_range - 2)
     base = _CONF_BASE[idx] if idx < len(_CONF_BASE) else _CONF_BASE[-1] + (idx - len(_CONF_BASE) + 1) * 0.09
-    return round(base * _CONF_MULTIPLIER, 4)
+    return round(base * _CONF_MULTIPLIER, 2)
 
 
 class AlmaBudgetLine(models.Model):
@@ -83,8 +83,8 @@ class AlmaBudgetLine(models.Model):
     # ------------------------------------------------------------------
     quantity = fields.Float('Cantidad', default=0.0, digits=(10, 0))
     margin_pct = fields.Float(
-        'Margen (%)', default=0.10,
-        help='Margen sobre coste. Ej: 0.10 = 10%. Precio venta = coste × (1 + margen).')
+        'Margen (%)', default=1.0,
+        help='Margen sobre coste. Ej: 1.0 = 100% (precio venta = coste × 2). Precio venta = coste × (1 + margen).')
 
     fabric_color_id = fields.Many2one(
         'alma.fabric.color', string='Artículo / Color',
@@ -320,13 +320,11 @@ class AlmaBudgetLine(models.Model):
             article_code = line.article_type_id.code if line.article_type_id else 0
 
             # ---- Coste confección (col AG) ----
-            if article_code == 3:  # Servilleta
-                conf_base = _CONF_SERVILLETA_BASE
-            else:
-                conf_base = _confection_rate(Z, AA) if Z > 0 and AA > 0 else 0.0
+            conf_base = _confection_rate(Z, AA) if Z > 0 and AA > 0 else 0.0
 
-            # Dobladillo doble duplica la confección
-            conf = conf_base * (1 if V == 1 else 2)
+            # Dobladillo sencillo (V==1) o Lito (tipo 7) → ×1; resto → ×2
+            is_simple_hem = (V == 1 or article_code == 7)
+            conf = conf_base * (1 if is_simple_hem else 2)
             # Empalme multiplica por 3
             if line.has_empalme:
                 conf *= 3

@@ -44,6 +44,11 @@ class AlmaBudget(models.Model):
                                 'Resto a la entrega de mercancía.\n'
                                 'La cantidad de prendas puede variar en un +/- 10%.')
 
+    currency_id = fields.Many2one(
+        'res.currency',
+        default=lambda self: self.env.company.currency_id,
+        string='Moneda', readonly=True)
+
     sale_order_id = fields.Many2one('sale.order', string='Pedido de Venta vinculado')
 
     @api.depends('line_ids.line_total')
