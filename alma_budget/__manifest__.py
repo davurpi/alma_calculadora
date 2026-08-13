@@ -1,6 +1,6 @@
 {
     'name': 'Alma - Calculadora de Presupuestos Mantelería',
-    'version': '17.0.1.0.0',
+    'version': '19.0.1.0.0',
     'category': 'Sales',
     'summary': 'Calculadora de presupuestos con lógica de tejidos, confección y empalmes',
     'author': 'Alma',
