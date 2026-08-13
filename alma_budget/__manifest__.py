@@ -10,6 +10,7 @@
         'data/alma_confection_data.xml',
         'views/alma_fabric_views.xml',
         'views/alma_budget_views.xml',
+        'views/alma_calculator_wizard_views.xml',
         'views/menus.xml',
         'report/report_actions.xml',
         'report/report_budget_client.xml',

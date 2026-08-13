@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         WIZARD: Calculadora Rápida de Presupuesto
+    ================================================================ -->
+    <record id="view_alma_calculator_wizard_form" model="ir.ui.view">
+        <field name="name">alma.calculator.wizard.form</field>
+        <field name="model">alma.calculator.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Calculadora Rápida">
+                <sheet>
+
+                    <!-- ── Tejido y color ──────────────────────────────── -->
+                    <group>
+                        <group>
+                            <field name="fabric_id" string="Tejido"
+                                   options="{'no_quick_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="fabric_color_id" string="Color"
+                                   options="{'no_quick_create': True}"
+                                   domain="[('fabric_id', '=', fabric_id)]"/>
+                        </group>
+                    </group>
+
+                    <!-- ── Artículo, cantidad y margen ────────────────── -->
+                    <group>
+                        <group>
+                            <field name="quantity" string="Cantidad"/>
+                            <field name="margin_pct" string="Margen (%)"
+                                   widget="percentage"/>
+                        </group>
+                        <group>
+                            <field name="article_type_id" string="Tipo de artículo"
+                                   options="{'no_quick_create': True}"/>
+                        </group>
+                    </group>
+
+                    <separator string="Forma de la mesa"/>
+
+                    <!-- ── Forma de la mesa (radio) ───────────────────── -->
+                    <group>
+                        <field name="mesa_form" widget="radio"
+                               options="{'horizontal': True}"/>
+                    </group>
+
+                    <!-- ── Medidas ────────────────────────────────────── -->
+                    <group>
+                        <group>
+                            <!-- Rectangular: etiqueta "Ancho mesa (cm)" -->
+                            <field name="width_mesa" string="Ancho mesa (cm)"
+                                   invisible="mesa_form == 'round'"/>
+                            <!-- Redonda: mismo campo, etiqueta "Diámetro (cm)" -->
+                            <field name="width_mesa" string="Diámetro (cm)"
+                                   invisible="mesa_form != 'round'"/>
+                            <!-- Largo: sólo si rectangular -->
+                            <field name="length_mesa" string="Largo mesa (cm)"
+                                   invisible="mesa_form == 'round'"/>
+                        </group>
+                        <group>
+                            <field name="table_height" string="Alto de la mesa (cm)"/>
+                            <field name="extra_length" string="Añadir largo (cm)"/>
+                            <field name="drop" string="Caída del mantel (cm)"/>
+                        </group>
+                    </group>
+
+                    <separator string="Confección"/>
+
+                    <!-- ── Dobladillo ─────────────────────────────────── -->
+                    <group>
+                        <group>
+                            <field name="hem_type" string="Dobladillo"/>
+                            <field name="hem_cm" string="Dobladillo (cm)"
+                                   invisible="hem_type != 'custom'"/>
+                        </group>
+                    </group>
+
+                    <!-- ── Checkboxes de opciones ─────────────────────── -->
+                    <group>
+                        <group>
+                            <field name="apply_shrinkage" string="Encogimiento"/>
+                            <field name="round_cut" string="Corte redondo"/>
+                            <field name="use_remnants" string="Cobra sobrante"/>
+                            <field name="rounded_corners" string="Picos redondeados"/>
+                        </group>
+                        <group>
+                            <field name="has_empalme" string="Empalme"/>
+                            <field name="empalme_override" string="Nº de empalmes (si son menos)"
+                                   invisible="not has_empalme"/>
+                            <field name="has_feston" string="Festón"/>
+                            <field name="feston_color" string="Color festón"
+                                   invisible="not has_feston"/>
+                        </group>
+                    </group>
+
+                    <separator string="Resultado"/>
+
+                    <!-- ── Medidas calculadas (sólo lectura) ─────────── -->
+                    <group>
+                        <group>
+                            <field name="finished_width" string="Medida terminada ancho (cm)"
+                                   readonly="1"/>
+                            <field name="finished_length" string="Medida terminada largo (cm)"
+                                   readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="cut_width" string="Ancho de corte (cm)" readonly="1"/>
+                            <field name="cut_length" string="Largo de corte (cm)" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="unit_cost" string="Precio unitario (€)" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="line_total" string="Total línea (€)" readonly="1"/>
+                        </group>
+                    </group>
+
+                </sheet>
+
+                <!-- ── Botones del footer ─────────────────────────────── -->
+                <footer>
+                    <!-- "Generar presupuesto" = añadir línea y cerrar -->
+                    <button name="action_confirm_and_close" string="Generar presupuesto"
+                            type="object" class="btn-primary"/>
+                    <!-- "Añadir línea" = añadir y abrir de nuevo limpio -->
+                    <button name="action_add_line" string="Añadir línea"
+                            type="object" class="btn-secondary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         ACTION: abrir el wizard desde un pedido de venta
+    ================================================================ -->
+    <record id="action_alma_calculator_wizard" model="ir.actions.act_window">
+        <field name="name">Calculadora Rápida</field>
+        <field name="res_model">alma.calculator.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'dialog_size': 'large'}</field>
+    </record>
+
+    <!-- ================================================================
+         BOTÓN en el formulario de Pedido de Venta (herencia)
+    ================================================================ -->
+    <record id="view_sale_order_inherit_alma_calculator" model="ir.ui.view">
+        <field name="name">sale.order.form.alma.calculator</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Añadir botón "Calculadora Rápida" en la cabecera -->
+            <xpath expr="//button[@name='action_confirm']" position="before">
+                <button
+                    name="%(action_alma_calculator_wizard)d"
+                    string="🧮 Calculadora Rápida"
+                    type="action"
+                    class="btn-secondary"
+                    context="{'default_sale_order_id': active_id}"
+                />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

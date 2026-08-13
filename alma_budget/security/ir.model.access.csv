@@ -5,3 +5,4 @@ access_alma_fabric_color,alma.fabric.color,model_alma_fabric_color,,1,1,1,1
 access_alma_empalme,alma.empalme,model_alma_empalme,,1,1,1,1
 access_alma_budget,alma.budget,model_alma_budget,,1,1,1,1
 access_alma_budget_line,alma.budget.line,model_alma_budget_line,,1,1,1,1
+access_alma_calculator_wizard,alma.calculator.wizard,model_alma_calculator_wizard,,1,1,1,1
